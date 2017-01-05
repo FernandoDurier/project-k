@@ -1,0 +1,18 @@
+[{
+	"database":"Cloudant",
+	"url":"nandinhoesperto.cloudant.com/knowledge" ,
+	"knowledgeDocFilter":"/_design/indexKnow/_search/indexKnow?q=",
+	"filterableAttributes":[
+		{"attr1":"tag"},
+		{"attr2":"description"},
+		{"attr3":"tipo"},
+		{"attr4":"linguagem"}
+	]
+},{
+	"database":"DashDB",
+	"url":null,
+	"port":null,
+	"user":null,
+	"pass":null,
+	"hostname":null
+}]
