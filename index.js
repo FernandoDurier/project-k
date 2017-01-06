@@ -1,5 +1,6 @@
 var knowDAO = require('./main/knowledge.js');
 
-knowDAO.getKnowledgeW("tag","\"sql\"","All SQL Knowledge");
+//knowDAO.getKnowledgeW("tag","\"sql\"","All SQL Knowledge");
 
-//knowDAO.getKnowledge("tag","\"NoSQL\"");
+knowDAO.postKnowledge("Node.js knowledge","javascript",["Node.js","javascript"],"posting test input");
+

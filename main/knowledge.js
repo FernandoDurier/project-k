@@ -119,8 +119,32 @@ exports.getKnowledge = function(filter,valor){
 }
 
 /*post*/
+exports.postKnowledge = function(tipo,linguagem,tags,description){
+        
+        var json = default_doc;
+        
+        json.tipo = tipo;
+        json.linguagem = linguagem;
+        json.tags = tags;
+        json.description = description;
 
+        var txt = json;
 
+        request({
+        url:   cloud_connection[0].url,//URL to hit
+        qs: {from: 'tp fernando', time: +new Date()}, //Query string data
+        method: 'POST',
+        //Lets post the following key/values as form
+        json: txt
+    }, function(error, response, body){
+        if(error) {
+            console.log(error);
+        } 
+        else {
+            console.log(response.statusCode, body);
+        }
+    });
+}
 /*put*/
 
 
