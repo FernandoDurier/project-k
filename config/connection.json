@@ -1,7 +1,7 @@
 [{
 	"database":"Cloudant",
-	"url":"nandinhoesperto.cloudant.com/knowledge" ,
-	"knowledgeDocFilter":"/_design/indexKnow/_search/indexKnow?q=",
+	"url":"http://nandinhoesperto.cloudant.com/knowledge" ,
+	"knowledgeDocFilter":"indexKnow",
 	"filterableAttributes":[
 		{"attr1":"tag"},
 		{"attr2":"description"},
