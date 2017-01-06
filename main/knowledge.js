@@ -121,13 +121,13 @@ exports.getKnowledge = function(filter,valor){
 /*post*/
 exports.postKnowledge = function(tipo,linguagem,tags,description){
         
-        var json = default_doc;
+        var json = {tipo:null,linguagem:null,tags:null,description:null};
         
         json.tipo = tipo;
         json.linguagem = linguagem;
         json.tags = tags;
         json.description = description;
-
+        console.log("Key data: "+ key.Key +", "+key.Password);
         var txt = json;
 
         request({
@@ -146,6 +146,49 @@ exports.postKnowledge = function(tipo,linguagem,tags,description){
     });
 }
 /*put*/
+exports.putKnowledge = function(id,rev,tipo,linguagem,tags,description){
+        
+        var json = default_doc;
+        json._id = id;
+        json._rev = rev;
+        json.tipo = tipo;
+        json.linguagem = linguagem;
+        json.tags = tags;
+        json.description = description;
 
+        var txt = json;
+
+        request({
+        url: cloud_connection[0].url+"/"+id,//API URL to hit,
+        qs: {from: 'tp fernando', time: +new Date()}, //Query string data
+        method: 'PUT',
+
+        //Lets post the following key/values as form
+        json: txt
+    }, function(error, response, body){
+        if(error) {
+            console.log(error);
+        } 
+        else {
+            console.log(response.statusCode, body);
+        }
+    });
+}
 
 /*delete*/
+exports.deleteKnowledge = function(id,rev){
+
+        request({
+        url: cloud_connection[0].url+"/"+id+"?rev="+rev,//URL to hit
+        qs: {from: 'tp fernando', time: +new Date()}, //Query string data
+        method: 'DELETE',
+        //Lets post the following key/values as form
+    }, function(error, response, body){
+        if(error) {
+            console.log(error);
+        } 
+        else {
+            console.log(response.statusCode, body);
+        }
+    });
+}
