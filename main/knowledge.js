@@ -29,10 +29,10 @@ exports.getKnowledgeW = function(filter,valor,sdoc){
 
           var doc = searchindex + filtro;
             console.log("Acessando cloudant em: "+curl+"/"+doc +"\n");
-            
+
           var http = require('http');
           var body = "";
-          
+
           var iterator = function(profile){
               var iteratorDefer = Q.defer();
                for(var i=0;i<profile.length;i++){
@@ -51,10 +51,10 @@ exports.getKnowledgeW = function(filter,valor,sdoc){
                 if(err) {
                     return console.log(err);
                 }
-                
+
                 console.log("The file was saved!");writerDefer.resolve(true);
                 console.log("--------------------------------------------------------------------------------");
-               
+
             });
             return writerDefer.promise;
           }
@@ -71,7 +71,7 @@ exports.getKnowledgeW = function(filter,valor,sdoc){
                                                                                 iterator(profile).then(writer(sdoc,knowledgeVector));
 
                                                                                 var queryReturn = knowledgeVector;
-                                                                                return queryReturn;          								  
+                                                                                return queryReturn;
                                                                                 }
           							                                    );
 
@@ -82,24 +82,25 @@ exports.getKnowledgeW = function(filter,valor,sdoc){
 /*get only*/
 
 exports.getKnowledge = function(filter,valor){
+          var getDefer = Q.defer();
           var curl = cloud_connection[0].url;
           var filtro = filter;
           var det = filtro.trim();
           console.log(cloud_connection[0].knowledgeDocFilter);
           var searchindex = cloud_connection[0].knowledgeDocFilter;
-          
+
           if( det != ""){
               filtro = "?q=" + filter + ":" + valor + "&include_docs=true";
           }
           if(searchindex.trim()!=""){
-            searchindex = "_design/" + searchindex + "/_search/" + searchindex;
+            searchindex = "/_design/" + searchindex + "/_search/" + searchindex;
           }
 
 
           var doc = searchindex + filtro;
             console.log("Acessando cloudant em: "+curl+doc +"\n");
             console.log("--------------------------------------------------------------------------------");
-
+            var result;
           var http = require('http');
           var body = "";
           var request = http.get(( curl + "/" + doc),function(response){
@@ -110,19 +111,20 @@ exports.getKnowledge = function(filter,valor){
                                                                         );
                                                                         response.on("end", function(){
                                                                                 var profile = JSON.stringify(JSON.parse(body).rows);
-                                                                                console.log(profile);
+                                                                                getDefer.resolve(JSON.parse(body).rows);
                                                                                 }
           							                                    );
 
           						                                    }
           					   );
+                       return getDefer.promise;
 }
 
 /*post*/
 exports.postKnowledge = function(tipo,linguagem,tags,description){
-        
+
         var json = {tipo:null,linguagem:null,tags:null,description:null};
-        
+
         json.tipo = tipo;
         json.linguagem = linguagem;
         json.tags = tags;
@@ -139,7 +141,7 @@ exports.postKnowledge = function(tipo,linguagem,tags,description){
     }, function(error, response, body){
         if(error) {
             console.log(error);
-        } 
+        }
         else {
             console.log(response.statusCode, body);
         }
@@ -147,7 +149,7 @@ exports.postKnowledge = function(tipo,linguagem,tags,description){
 }
 /*put*/
 exports.putKnowledge = function(id,rev,tipo,linguagem,tags,description){
-        
+    var putDefer = Q.defer();
         var json = default_doc;
         json._id = id;
         json._rev = rev;
@@ -167,13 +169,16 @@ exports.putKnowledge = function(id,rev,tipo,linguagem,tags,description){
         json: txt
     }, function(error, response, body){
         if(error) {
-            console.log(error);
-        } 
+            console.log(error); putDefer.reject(error);
+        }
         else {
-            console.log(response.statusCode, body);
+            console.log(response.statusCode, body); putDefer.resolve(body);
         }
     });
+    return putDefer.promise;
 }
+
+
 
 /*delete*/
 exports.deleteKnowledge = function(id,rev){
@@ -186,7 +191,7 @@ exports.deleteKnowledge = function(id,rev){
     }, function(error, response, body){
         if(error) {
             console.log(error);
-        } 
+        }
         else {
             console.log(response.statusCode, body);
         }

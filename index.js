@@ -29,8 +29,8 @@ for(var i = 0; i < 3; i++){
         id_vect[i],
         rev_vect[i],
         "tipo"+i,
-        "javascript", 
-        ["Node.js","javascript","js"], 
+        "javascript",
+        ["Node.js","javascript","js"],
         "posting test input modified"+i
      );
 }
@@ -48,12 +48,46 @@ var update = function(){
         vetor[i]._id,
         vetor[i]._rev,
         "tipo",
-        "javascript", 
-        ["Node.js","javascript","js"], 
+        "javascript",
+        ["Node.js","javascript","js"],
         "posting teste input modified"+i
      );
     }
 };
 
 //get();
-update();
+//update();
+
+/*better put*/
+var fullPutKnowledge = function(tag,value,newDoc){
+    var obj = knowDAO.getKnowledge(tag,value);
+    knowDAO.putKnowledge(obj._id,obj._rev,newDoc.tipo,newDoc.linguagem,newDoc.tags,newDoc.description);
+}
+
+var upDoc = {
+    "tipo":"full update",
+    "linguagem":"NoSQL",
+    "tags":["nosql","node.js","cloudant"],
+    "description":"teste de fullUpdate"
+};
+
+
+
+//fullPutKnowledge("tipo","teste de full update",upDoc);
+
+//var x = knowDAO.getKnowledge("tipo","teste de full update");
+//console.log("\n x = "+x);
+
+//attemp to use cloudant http api
+var newDescription = "devops";
+
+knowDAO.getKnowledge("tipo","\"squad\"").then(function(data){
+  for(var dat = 0; dat < data.length; dat++){
+    console.log("id: "+data[dat].doc._id+"; \n rev: "+data[dat].doc._rev +";\n tipo: "+data[dat].doc.tipo+";\n linguagem: " + data[dat].doc.linguagem+";\n tags: "+JSON.stringify(data[dat].doc.tags)+";\n description:"+data[dat].doc.description+";\n");
+    console.log("-------------------------------------------------------------------------------");
+    knowDAO.putKnowledge(data[dat].doc._id,data[dat].doc._rev, data[dat].doc.tipo, data[dat].doc.linguagem, data[dat].doc.tags, newDescription);
+  }
+  console.log(data);
+}).fail(function(err){
+  console.log(err);
+});
